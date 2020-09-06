@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.doh.yun.sign.mapper.SignMapper">
+	
+	<select id="selectDuplicateEmailCount" parameterType="java.lang.String" resultType="java.lang.String">
+	/*	SignMapper.xml	|	selectDuplicateEmailCount	|	Lee Dohyun	*/
+	SELECT
+		user_status_code
+	FROM
+		spring.user_status
+	WHERE
+		user_id = 
+				(
+				SELECT
+					user_id
+				FROM
+					spring.users
+				WHERE
+					user_email = #{email}
+				)
+	</select>
+	
+	<insert id="insertUserToUsers" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="user_id"  keyColumn="user_id" >
+	/*	SignMapper.xml	|	insertUserToUsers	|	Lee Dohyun	*/
+	INSERT INTO
+		spring.users
+		(
+			user_email
+		,	user_name
+		, 	password
+		)
+	VALUES
+		(
+			#{email}
+		,	#{email}
+		, 	#{password}
+		)
+	</insert>
+
+	<insert id="insertUserToUserStatus" parameterType="java.util.HashMap">
+	/*	SignMapper.xml	|	insertUserToUserStatus	|	Lee Dohyun	*/
+	INSERT INTO
+		spring.user_status
+		(
+			user_id
+		,	user_status_code
+		)
+	VALUES
+		(
+			#{user_id}
+		,	2
+		)
+	</insert>
+
+	<insert id="insertEmailCode" parameterType="java.util.HashMap">
+	/*	SignMapper.xml	|	insertEmailCode	|	Lee Dohyun	*/
+	INSERT INTO
+		spring.user_emal_confirm_code
+		(
+			user_id
+		,	email_confirm_code
+		)
+	VALUES
+		(
+			#{user_id}
+		,	#{email_confirm_code}
+		)
+	</insert>
+	
+	<update id="updateUserStatusById" parameterType="java.util.HashMap">
+	/*	SignMapper.xml	|	updateUserStatusById	|	Lee Dohyun	*/
+	UPDATE
+		spring.user_status
+	SET
+		user_status_code=#{status}
+	WHERE
+		user_id = #{userId}		
+	</update>
+	
+	<update id="updateUserStatusByEmail" parameterType="java.util.HashMap">
+	/*	SignMapper.xml	|	updateUserStatusByEmail	|	Lee Dohyun	*/
+	UPDATE
+		spring.user_status
+	SET
+		user_status_code=#{status}
+	WHERE
+		user_id = 
+				(
+				SELECT
+					user_id
+				FROM
+					spring.users
+				WHERE
+					user_email = #{email}
+				)			
+	</update>
+
+	<select id="selectEmailAuthCountByEmail" parameterType="java.lang.String" resultType="java.lang.Integer">
+	/*	SignMapper.xml	|	selectEmailAuthCountByEmail	|	Lee Dohyun	*/
+	SELECT
+		email_cnt
+	FROM
+		spring.users
+	WHERE
+		user_email = #{email}
+	</select>
+
+	<select id="selectEmailAuthCountById" parameterType="java.lang.String" resultType="java.lang.Integer">
+	/*	SignMapper.xml	|	selectEmailAuthCountById	|	Lee Dohyun	*/
+	SELECT
+		email_cnt
+	FROM
+		spring.users
+	WHERE
+		user_id = #{userId}
+	</select>
+
+	<update id="updateEmailAuthCountAddOne" parameterType="java.lang.String">
+	/*	SignMapper.xml	|	updateEmailAuthCountAddOne	|	Lee Dohyun	*/
+	UPDATE
+		spring.users
+	SET
+		email_cnt = email_cnt + 1
+	WHERE
+		user_email = #{email}
+	</update>
+
+	<select id="selectEmailAuthTimeDiff" parameterType="java.lang.String" resultType="java.lang.Integer">
+	/*	SignMapper.xml	|	selectEmailAuthTimeDiff	|	Lee Dohyun	*/
+	SELECT
+		TIMESTAMPDIFF(MINUTE, c_timestamp, CURRENT_TIMESTAMP)
+	FROM
+		spring.user_emal_confirm_code
+	WHERE
+		user_id = 
+				(
+				SELECT
+					user_id
+				FROM
+					spring.users
+				WHERE
+					user_email = #{email}
+				)	
+	ORDER BY
+		order_no DESC
+	LIMIT 1
+	</select>
+	
+	<update id="updateEmailAuthCountToZero" parameterType="java.lang.String">
+	/*	SignMapper.xml	|	updateEmailAuthCountToZero	|	Lee Dohyun	*/
+	UPDATE
+		spring.users
+	SET
+		email_cnt = 0
+	WHERE
+		user_email = #{email}
+	</update>
+
+	<select id="selectEmailAuthCode" parameterType="java.lang.String" resultType="java.lang.String">
+	/*	SignMapper.xml	|	selectEmailAuthCode	|	Lee Dohyun	*/
+	SELECT
+		email_confirm_code
+	FROM
+		spring.user_emal_confirm_code
+	WHERE
+		user_id = 
+				(
+				SELECT
+					user_id
+				FROM
+					spring.users
+				WHERE
+					user_email = #{email}
+				)	
+	ORDER BY
+		order_no DESC
+	LIMIT 1
+	</select>
+	
+	<insert id="insertDefaultUserRole" parameterType="java.lang.String">
+	INSERT INTO
+		spring.authorities
+		(
+			user_id
+		,	user_authority
+		)
+	VALUES
+		(
+			(
+			SELECT
+				user_id
+			FROM
+				spring.users
+			WHERE
+				user_email = #{email}
+			)	
+		,	1
+		)
+	</insert>
+
+	<select id="selectUserInfo" parameterType="java.lang.String" resultType="com.doh.yun.security.dto.UserDetailsImpl">
+	/*	SignMapper.xml	|	selectUserInfo	|	Lee Dohyun	*/
+	SELECT
+		user_id AS userId
+	,	user_email AS email
+	,	user_name AS name
+	,	password AS password
+	,	(
+		CASE 
+			(
+			SELECT
+				user_status_code
+			FROM
+				spring.user_status
+			WHERE
+				user_id =
+							(
+							SELECT
+								user_id
+							FROM
+								spring.users
+							WHERE
+								user_email = #{email}
+							)
+			)
+			WHEN 3 THEN 0
+			ELSE 1
+		END
+		)	AS accountNonExpired
+	,	(
+		CASE 
+			(
+			SELECT
+				user_status_code
+			FROM
+				spring.user_status
+			WHERE
+				user_id =
+							(
+							SELECT
+								user_id
+							FROM
+								spring.users
+							WHERE
+								user_email = #{email}
+							)
+			)
+			WHEN 4 THEN 0
+			ELSE 1
+		END
+		)	AS accountNonLocked
+	,	(
+		CASE 
+			(
+			SELECT
+				user_status_code
+			FROM
+				spring.user_status
+			WHERE
+				user_id =
+							(
+							SELECT
+								user_id
+							FROM
+								spring.users
+							WHERE
+								user_email = #{email}
+							)
+			)
+			WHEN 5 THEN 0
+			ELSE 1
+		END
+		)	AS credentialsNonExpired
+	,	enabled AS enabled
+	FROM
+		spring.users
+	WHERE
+		user_id = 
+				(
+				SELECT
+					user_id
+				FROM
+					spring.users
+				WHERE
+					user_email = #{email}
+				)		
+	</select>
+
+	<select id="selectUserAuthoritiesByUserId" parameterType="java.lang.String" resultType="java.util.HashMap">
+	/*	SignMapper.xml	|	selectUserAuthoritiesByUserId	|	Lee Dohyun	*/
+	SELECT
+		b.authority_name as authority
+	FROM
+		spring.authorities a
+	INNER JOIN 
+		spring.authorities_code b
+	ON	a.user_authority = b.authority_code
+	WHERE
+		user_id = #{userId}
+	</select>
+	
+</mapper>
