@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
-<%@ page session="false"%>
 <html>
 <head>
 <title>Home</title>
@@ -10,9 +9,14 @@
 <body>
 	<h1>Hello world!</h1>
 
+		<form action="${pageContext.request.contextPath}/signup" method="GET">
+			<sec:csrfInput/>
+			<button type="submit">SIGN UP</button>
+		</form>
+
 	<sec:authorize access="isAnonymous()">
 		<form action="${pageContext.request.contextPath}/signin" method="GET">
-			
+			<sec:csrfInput/>
 			<button type="submit">LOGIN</button>
 		</form>
 	</sec:authorize>

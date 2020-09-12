@@ -9,7 +9,6 @@ import org.apache.ibatis.annotations.Mapper;
 import com.doh.yun.security.dto.UserDetailsImpl;
 
 @Mapper
-
 public interface SignMapper {
 
 	String selectDuplicateEmailCount(String email);

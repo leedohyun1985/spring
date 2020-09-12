@@ -41,7 +41,7 @@ public class ErrorController {
 			errorType = (String) httpServletRequest.getAttribute("javax.servlet.error.exception_type");
 			errorMessage = (String) httpServletRequest.getAttribute("javax.servlet.error.message");
 			errorName = (String) httpServletRequest.getAttribute("javax.servlet.error.servlet_name");
-			errorException = (String) httpServletRequest.getAttribute("javax.servlet.error.exception");
+			errorException = "";/* (String) httpServletRequest.getAttribute("javax.servlet.error.exception"); */
 			errorUrl = (String) httpServletRequest.getAttribute("javax.servlet.error.request_uri");
 		}
 		else
@@ -50,7 +50,7 @@ public class ErrorController {
 			errorType = (String)httpServletRequest.getParameter("errorType");
 			errorMessage = (String) httpServletRequest.getParameter("errorMessage");
 			errorName = (String) httpServletRequest.getParameter("errorName");
-			errorException = (String) httpServletRequest.getParameter("errorException");
+			errorException = "";/* (String) httpServletRequest.getParameter("errorException"); */
 			errorUrl = (String) httpServletRequest.getParameter("errorUrl");
 		}
 		logger.info("errorCode : " + errorCode);

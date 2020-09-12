@@ -64,7 +64,7 @@
 	<!-- Spring profiles 운영배포시 수정요망 -->
 	<context-param>
 		<param-name>spring.profiles.active</param-name>
-		<param-value>prod</param-value><!-- 로컬/개발/운영 local/dev/prod -->
+		<param-value>dev</param-value><!-- 로컬/개발/운영 local/dev/prod -->
 	</context-param>
 
 	<error-page>

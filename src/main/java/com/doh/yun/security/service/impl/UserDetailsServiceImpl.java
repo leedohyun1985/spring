@@ -25,8 +25,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetailsImpl loadUserByUsername(String email) throws UsernameNotFoundException {
-		logger.info("loadUserByUsername email : " + email);
-		logger.info("email : " + email);
 
 		UserDetailsImpl user = signService.getUserByEmail(email);
 

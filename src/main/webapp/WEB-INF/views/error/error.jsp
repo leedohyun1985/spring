@@ -1,7 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page session="false"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,7 +19,8 @@
 <link
 	href="https://fonts.googleapis.com/css?family=Righteous&display=swap"
 	rel="stylesheet">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/space-404/dist/style.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/space-404/dist/style.css">
 </head>
 
 <body>
@@ -40,8 +42,20 @@
 		<div class="error__title">${errorCode}</div>
 		<div class="error__subtitle">${errorMessage}</div>
 		<%-- <div class="error__description">${errorName}</div> --%>
-		<button class="error__button error__button--active"
-			onclick="location.href='${pageContext.request.contextPath}/signin'">LOGIN</button>
+
+	<sec:authorize access="isAnonymous()">
+		<form action="${pageContext.request.contextPath}/signin" method="GET">
+			<button class="error__button error__button--active" type="submit">LOGIN</button>
+		</form>
+	</sec:authorize>
+	
+	<sec:authorize access="isAuthenticated()">
+		<form action="${pageContext.request.contextPath}/signout" method="POST">
+			<sec:csrfInput />
+			<button class="error__button error__button--active" type="submit">LOGOUT</button>
+		</form>
+	</sec:authorize>		
+	
 		<button class="error__button">CONTACT</button>
 	</div>
 
@@ -73,7 +87,8 @@
 		</div>
 	</div>
 	<!-- partial -->
-	<script src="${pageContext.request.contextPath}/resources/space-404/dist/script.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/space-404/dist/script.js"></script>
 
 </body>
 

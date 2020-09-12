@@ -37,9 +37,6 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 		try {
 			userDetailsImpl = userDetailsServiceImpl.loadUserByUsername(username);
 			hashedPassword = bCryptPasswordEncoder.encode(rawPassword);
-			logger.info(
-					"username : " + username + " / rawPassword : " + rawPassword + " / hash password : " + hashedPassword);
-			logger.info("username : " + userDetailsImpl.getUsername() + " / password : " + userDetailsImpl.getPassword());
 			if (!bCryptPasswordEncoder.matches(rawPassword, userDetailsImpl.getPassword()))
 				throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
 			authorities = userDetailsImpl.getAuthorities();
