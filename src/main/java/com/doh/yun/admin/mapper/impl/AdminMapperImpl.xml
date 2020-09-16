@@ -11,7 +11,7 @@
 	,	user_name<!-- , password --><!-- , enabled , email_cnt , c_user_id , c_timestamp , m_user_id 
 			, m_timestamp -->
 	FROM
-		spring.`user`
+		spring.users
 	</select>
 
 	<select id="selectTableComment" parameterType="java.util.HashMap" resultType="java.lang.String">

@@ -15,7 +15,7 @@
 				SELECT
 					user_id
 				FROM
-					spring.user
+					spring.users
 				WHERE
 					user_email = #{email}
 				)
@@ -24,7 +24,7 @@
 	<insert id="insertUserToUsers" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="user_id"  keyColumn="user_id" >
 	/*	SignMapper.xml	|	insertUserToUsers	|	Lee Dohyun	*/
 	INSERT INTO
-		spring.user
+		spring.users
 		(
 			user_email
 		,	user_name
@@ -56,7 +56,7 @@
 	<insert id="insertEmailCode" parameterType="java.util.HashMap">
 	/*	SignMapper.xml	|	insertEmailCode	|	Lee Dohyun	*/
 	INSERT INTO
-		spring.user_emal_confirm_code
+		spring.user_emal_confirm_codes
 		(
 			user_id
 		,	email_confirm_code
@@ -90,7 +90,7 @@
 				SELECT
 					user_id
 				FROM
-					spring.user
+					spring.users
 				WHERE
 					user_email = #{email}
 				)			
@@ -101,7 +101,7 @@
 	SELECT
 		email_cnt
 	FROM
-		spring.user
+		spring.users
 	WHERE
 		user_email = #{email}
 	</select>
@@ -111,7 +111,7 @@
 	SELECT
 		email_cnt
 	FROM
-		spring.user
+		spring.users
 	WHERE
 		user_id = #{userId}
 	</select>
@@ -119,7 +119,7 @@
 	<update id="updateEmailAuthCountAddOne" parameterType="java.lang.String">
 	/*	SignMapper.xml	|	updateEmailAuthCountAddOne	|	Lee Dohyun	*/
 	UPDATE
-		spring.user
+		spring.users
 	SET
 		email_cnt = email_cnt + 1
 	WHERE
@@ -131,14 +131,14 @@
 	SELECT
 		TIMESTAMPDIFF(MINUTE, c_timestamp, CURRENT_TIMESTAMP)
 	FROM
-		spring.user_emal_confirm_code
+		spring.user_emal_confirm_codes
 	WHERE
 		user_id = 
 				(
 				SELECT
 					user_id
 				FROM
-					spring.user
+					spring.users
 				WHERE
 					user_email = #{email}
 				)	
@@ -150,7 +150,7 @@
 	<update id="updateEmailAuthCountToZero" parameterType="java.lang.String">
 	/*	SignMapper.xml	|	updateEmailAuthCountToZero	|	Lee Dohyun	*/
 	UPDATE
-		spring.user
+		spring.users
 	SET
 		email_cnt = 0
 	WHERE
@@ -162,14 +162,14 @@
 	SELECT
 		email_confirm_code
 	FROM
-		spring.user_emal_confirm_code
+		spring.user_emal_confirm_codes
 	WHERE
 		user_id = 
 				(
 				SELECT
 					user_id
 				FROM
-					spring.user
+					spring.users
 				WHERE
 					user_email = #{email}
 				)	
@@ -191,7 +191,7 @@
 			SELECT
 				user_id
 			FROM
-				spring.user
+				spring.users
 			WHERE
 				user_email = #{email}
 			)	
@@ -219,7 +219,7 @@
 							SELECT
 								user_id
 							FROM
-								spring.user
+								spring.users
 							WHERE
 								user_email = #{email}
 							)
@@ -241,7 +241,7 @@
 							SELECT
 								user_id
 							FROM
-								spring.user
+								spring.users
 							WHERE
 								user_email = #{email}
 							)
@@ -263,7 +263,7 @@
 							SELECT
 								user_id
 							FROM
-								spring.user
+								spring.users
 							WHERE
 								user_email = #{email}
 							)
@@ -274,14 +274,14 @@
 		)	AS credentialsNonExpired
 	,	enabled AS enabled
 	FROM
-		spring.user
+		spring.users
 	WHERE
 		user_id = 
 				(
 				SELECT
 					user_id
 				FROM
-					spring.user
+					spring.users
 				WHERE
 					user_email = #{email}
 				)		
@@ -294,7 +294,7 @@
 	FROM
 		spring.authorities a
 	INNER JOIN 
-		spring.authorities_code b
+		spring.authorities_codes b
 	ON	a.user_authority = b.authority_code
 	WHERE
 		user_id = #{userId}

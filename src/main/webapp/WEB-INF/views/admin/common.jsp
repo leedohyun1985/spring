@@ -592,6 +592,7 @@ ArrayList<String> autoIncrementColumnList = (ArrayList<String>) request.getAttri
 								for (int i = 0; i < columnList.size(); i++) {
 								Map<String, Object> map = columnList.get(i);
 								boolean print = true;
+								boolean autoIncrement = false;
 
 								for (int j = 0; j < exceptionColumnList.size(); j++) {
 									if (String.valueOf(map.get("columnName")).equalsIgnoreCase(String.valueOf(exceptionColumnList.get(j)))) {
@@ -600,7 +601,7 @@ ArrayList<String> autoIncrementColumnList = (ArrayList<String>) request.getAttri
 								}
 								for (int j = 0; j < autoIncrementColumnList.size(); j++) {
 									if (String.valueOf(map.get("columnName")).equalsIgnoreCase(String.valueOf(autoIncrementColumnList.get(j)))) {
-								print = false;
+										autoIncrement = true;
 									}
 								}
 								if (print == true) {
@@ -630,13 +631,13 @@ ArrayList<String> autoIncrementColumnList = (ArrayList<String>) request.getAttri
 								if (!fkFlag) {
 								%>
 								<input type="text" class="form-control" id="updateInput<%=updateInputIndex%>"
-									name="<%=map.get("columnName")%>"
-									aria-describedby="basic-addon<%=updateInputIndex%>">
+									name="<%=map.get("columnName")%>" <%if(autoIncrement){%>readonly<%}%>
+									aria-describedby="basic-addon<%=updateInputIndex%>"  >
 								<%
 								updateInputIndex++;
 									} else {
 								%>
-								<select class="custom-select" name="<%=map.get("columnName")%>"
+								<select class="custom-select" name="<%=map.get("columnName")%>" <%if(autoIncrement){%>disabled<%}%>
 									id="updateInput<%=updateInputIndex%>">
 									<%
 										for (String value : inputList) {

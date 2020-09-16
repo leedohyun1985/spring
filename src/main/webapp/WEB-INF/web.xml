@@ -21,7 +21,7 @@
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+			<param-value>/WEB-INF/spring/appServlet/*-context.xml</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
@@ -64,7 +64,7 @@
 	<!-- Spring profiles 운영배포시 수정요망 -->
 	<context-param>
 		<param-name>spring.profiles.active</param-name>
-		<param-value>dev</param-value><!-- 로컬/개발/운영 local/dev/prod -->
+		<param-value>local</param-value><!-- 로컬/개발/운영 local/dev/prod -->
 	</context-param>
 
 	<error-page>

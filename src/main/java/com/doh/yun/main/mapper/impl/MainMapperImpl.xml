@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.doh.yun.main.mapper.MainMapper">
+
+	<insert id="insertLacaleData" parameterType="java.util.HashMap">
+	/* MainMapperImpl.xml | insertLacaleData | Lee Dohyun */
+	<if test="i18nList != null">
+	INSERT INTO
+		i18n_locales
+		(	
+			country
+		,	language
+		,	enabled
+		)
+	VALUES
+		<foreach collection="i18nList" item="dataMap" index="i" separator=",">
+		(
+			#{dataMap.country}
+		,	#{dataMap.language}
+		,	1
+		)
+		</foreach>
+	</if>
+	</insert>
+
+</mapper>
